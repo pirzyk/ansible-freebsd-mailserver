@@ -10,6 +10,7 @@
     owner: root
     group: wheel
     mode: "0755"
+  when: fm_dkim_create_keys|bool
 
 - name: "certificates: Create directory /etc/ssl/private"
   ansible.builtin.file:
@@ -18,6 +19,7 @@
     owner: root
     group: wheel
     mode: "0700"
+  when: fm_dkim_create_keys|bool
 
 - name: "certificates: Chmod 755 /usr/local/share/examples/dovecot/mkcert.sh"
   ansible.builtin.file:

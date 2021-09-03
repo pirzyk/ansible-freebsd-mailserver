@@ -13,6 +13,7 @@
     - dovecot-ldap.conf.ext
     - dovecot-sql.conf.ext
     - dovecot.conf
+  when: dovecot_example_copy|bool
   tags: dovecot_example_conf
 
 # dovecot.conf
@@ -58,6 +59,7 @@
       group = postfix
       }
   notify: reload dovecot
+  when: fm_postfix_enable|bool
   tags: dovecot_master_conf
 
 # create dh.pem
@@ -86,20 +88,6 @@
     group: wheel
     mode: "0644"
   when: dovecot_ssl_dh_generate|bool
-  tags: dovecot_ssl_dh
-
-# copy dh.pem
-- name: "dovecot: Copy {{ dovecot_ssl_dh_path }} to {{ dovecot_ssl_dh }}"
-  ansible.builtin.copy:
-    src: "{{ dovecot_ssl_dh_path }}"
-    dest: "{{ dovecot_ssl_dh }}"
-    owner: root
-    group: wheel
-    mode: "0644"
-  when:
-    - not dovecot_ssl_dh_custom|bool
-    - not dovecot_ssl_dh_cmd_generate|bool
-    - not dovecot_ssl_dh_generate|bool
   tags: dovecot_ssl_dh
 
 # conf.d/10-ssl.conf

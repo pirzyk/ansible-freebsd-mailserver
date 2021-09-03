@@ -7,6 +7,7 @@
       /usr/sbin/chown root:wheel {{ postfix_virtual }} &&
       chmod 0644 {{ postfix_virtual }}
     creates: "{{ postfix_virtual }}"
+  when: fm_postfix_enable|bool
   tags: postfix_virtual_aliases_file
 
 # EOF

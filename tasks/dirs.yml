@@ -22,6 +22,7 @@
   loop: "{{ fm_dkim_domains }}"
   loop_control:
     label: "{{ fm_dkim_dir_keys }}/{{ item.name }}"
+  when: fm_dkim_create_keys|bool
   tags: fm-dirs-dkim-domains
 
 # EOF

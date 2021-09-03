@@ -25,7 +25,7 @@
   loop: "{{ fm_dkim_domains }}"
   loop_control:
     label: "{{ item.selector }} {{ item.name }}"
-  when: not ansible_check_mode
+  when: not ansible_check_mode and fm_dkim_create_keys|bool
   tags: fm-dkim-keys-private-mod
 
 - name: "dkim: Set ownership and permissions of DKIM public keys"
@@ -37,7 +37,7 @@
   loop: "{{ fm_dkim_domains }}"
   loop_control:
     label: "{{ item.selector }}/{{ item.name }}"
-  when: not ansible_check_mode
+  when: not ansible_check_mode and fm_dkim_create_keys|bool
   tags: fm-dkim-keys-public-mod
 
 - name: "dkim: Create {{ fm_dkim_dir }}/TrustedHosts"
