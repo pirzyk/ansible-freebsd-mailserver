@@ -54,12 +54,14 @@
     name: dovecot
     state: started
     enabled: true
+  when: fm_dovecot_enable|bool
 
 - name: disable and stop dovecot
   ansible.builtin.service:
     name: dovecot
     state: stopped
     enabled: false
+  when: fm_dovecot_enable|bool
 
 - name: reload dovecot
   ansible.builtin.service:
@@ -75,10 +77,39 @@
 
 # Sendmail
 
+- name: restart sendmail
+  ansible.builtin.service:
+    name: sendmail
+    state: restarted
+  when: fm_sendmail_enable|bool
+
 - name: stop sendmail
   ansible.builtin.service:
     name: sendmail
     state: stopped
+
+- name: Update access
+  ansible.builtin.shell:
+  args:
+    cmd: "/usr/sbin/makemap hash {{ sendmail_access_file }} < {{ sendmail_access_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+
+- name: Update mailertable
+  ansible.builtin.shell:
+  args:
+    cmd: "/usr/sbin/makemap hash {{ sendmail_mailertable_file }} < {{ sendmail_mailertable_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+
+- name: Update virtusertable
+  ansible.builtin.shell:
+  args:
+    cmd: "/usr/sbin/makemap hash {{ sendmail_virtusertable_file }} < {{ sendmail_virtusertable_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+
+- name: Update sendmail.cf
+  ansible.builtin.command:
+    cmd: "/usr/bin/make {{ fm_sendmail_cf_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
 
 # DKIM
 
@@ -87,12 +118,14 @@
     name: milter-opendkim
     state: started
     enabled: true
+  when: fm_dkim_enable|bool
 
 - name: disable and stop dkim
   ansible.builtin.service:
     name: milter-opendkim
     state: stopped
     enabled: false
+  when: fm_dkim_enable|bool
 
 - name: reload dkim
   ansible.builtin.service:

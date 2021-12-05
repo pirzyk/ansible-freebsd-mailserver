@@ -60,6 +60,11 @@
   when: fm_postfix_enable|bool
   tags: fm-postfix_master
 
+- name: Import sendmail.yml
+  ansible.builtin.import_tasks: sendmail.yml
+  when: fm_sendmail_enable|bool
+  tags: fm-sendmail
+
 - name: Import spf.yml
   ansible.builtin.import_tasks: spf.yml
   when: fm_postfix_enable|bool

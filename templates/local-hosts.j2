@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+{% for hostname in fm_sendmail_local_hosts %}
+{{ hostname }}
+{% endfor %}

@@ -1,0 +1,70 @@
+---
+
+- name: "sendmail: Configure {{ sendmail_access_file }}"
+  ansible.builtin.template:
+    dest: "{{ sendmail_access_file }}"
+    src: access.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sendmail_access|default([])|length > 0
+  notify: Update access
+
+- name: "sendmail: Configure {{ sendmail_local_hosts_file }}"
+  ansible.builtin.template:
+    dest: "{{ sendmail_local_hosts_file }}"
+    src: local-hosts.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sendmail_local_hosts|default([])|length > 0
+
+- name: "sendmail: Configure {{ sendmail_trusted_users_file }}"
+  ansible.builtin.template:
+    dest: "{{ sendmail_trusted_users_file }}"
+    src: trusted-users.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sendmail_trusted_users|default([])|length > 0
+
+- name: "sendmail: Configure {{ sendmail_relay_domains_file }}"
+  ansible.builtin.template:
+    dest: "{{ sendmail_relay_domains_file }}"
+    src: relay-domains.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sendmail_relay_domains|default([])|length > 0
+
+- name: "sendmail: Configure {{ sendmail_mailertable_file }}"
+  ansible.builtin.template:
+    dest: "{{ sendmail_mailertable_file }}"
+    src: mailertable.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sendmail_mailertable|default([])|length > 0
+  notify: Update mailertable
+
+- name: "sendmail: Configure {{ sendmail_virtusertable_file }}"
+  ansible.builtin.template:
+    dest: "{{ sendmail_virtusertable_file }}"
+    src: virtusertable.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sendmail_virtusertable|default([])|length > 0
+  notify: Update virtusertable
+
+- name: "sendmail: Configure {{ fm_sendmail_mc_file }}"
+  ansible.builtin.lineinfile:
+    dest: "{{ fm_sendmail_mc_file }}"
+    regexp: '^{{ item.regexp }}'
+    line: "{{ item.line }}"
+  loop: "{{ sendmail_mc_conf }}"
+  when: fm_sendmail_enable|bool
+  notify: Update sendmail.cf
+
+# EOF
+...

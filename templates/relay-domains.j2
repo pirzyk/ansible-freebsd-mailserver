@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+{% for ip in fm_sendmail_relay_domains %}
+{{ ip }}
+{% endfor %}

@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+{% for item  in fm_sendmail_access %}
+{% for conf  in item.conf %}
+{{ item.tag}}:{{ conf.key }}    {{ conf.value }}
+{% endfor %}
+{% endfor %}
