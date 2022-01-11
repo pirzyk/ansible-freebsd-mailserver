@@ -10,6 +10,16 @@
   when: fm_sendmail_access|default([])|length > 0
   notify: Update access
 
+- name: "sendmail: Configure {{ sendmail_genericstable_file }}"
+  ansible.builtin.template:
+    dest: "{{ sendmail_genericstable_file }}"
+    src: genericstable.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sendmail_genericstable|default([])|length > 0
+  notify: Update genericstable
+
 - name: "sendmail: Configure {{ sendmail_local_hosts_file }}"
   ansible.builtin.template:
     dest: "{{ sendmail_local_hosts_file }}"

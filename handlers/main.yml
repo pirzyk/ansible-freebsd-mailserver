@@ -94,6 +94,12 @@
     cmd: "/usr/sbin/makemap hash {{ sendmail_access_file }} < {{ sendmail_access_file }}"
     chdir: "{{ fm_sendmail_dir }}"
 
+- name: Update genericstable
+  ansible.builtin.shell:
+  args:
+    cmd: "/usr/sbin/makemap hash {{ sendmail_genericstable_file }} < {{ sendmail_genericstable_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+
 - name: Update mailertable
   ansible.builtin.shell:
   args:
