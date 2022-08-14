@@ -116,6 +116,7 @@
   ansible.builtin.command:
     cmd: "/usr/bin/make {{ fm_sendmail_cf_file }}"
     chdir: "{{ fm_sendmail_dir }}"
+  notify: restart sendmail
 
 # DKIM
 
