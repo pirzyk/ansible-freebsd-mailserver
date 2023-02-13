@@ -1,5 +1,15 @@
 ---
 
+- name: "sendmail: create {{ fm_sendmail_mc_file }}"
+  ansible.builtin.file:
+    state: touch
+    access_time: preserve
+    modification_time: preserve
+    path: "{{ fm_sendmail_mc_file }}"
+    owner: root
+    group: wheel
+    mode: '0644'
+
 - name: "sendmail: Configure {{ sendmail_access_file }}"
   ansible.builtin.template:
     dest: "{{ sendmail_access_file }}"
@@ -27,6 +37,8 @@
     owner: root
     group: wheel
     mode: '0644'
+  vars:
+    hosts: "{{ fm_sendmail_local_hosts }}"
   when: fm_sendmail_local_hosts|default([])|length > 0
 
 - name: "sendmail: Configure {{ sendmail_trusted_users_file }}"

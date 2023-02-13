@@ -24,6 +24,18 @@
     - {regexp: sendmail_msp_queue_enable, value: "NO"}
   when: fm_postfix_enable|bool
   notify: stop sendmail
+  tags: fm-rcconf-postfix
+
+- name: "rcconf: Enable sendmail in /etc/rc.conf"
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: '{{ item.regexp }}="{{ item.value }}"'
+    backup: "{{ fm_backup_conf }}"
+  loop:
+    - {regexp: sendmail_enable, value: "YES"}
+  when: fm_sendmail_enable|bool
+  notify: start sendmail
   tags: fm-rcconf-sendmail
 
 - name: "rcconf: Enable and Start Postfix"
@@ -107,7 +119,7 @@
     backup: "{{ fm_backup_conf }}"
   loop: "{{ fm_dovecot_rcconf }}"
   when: fm_dovecot_enable|bool
-  notify: reload dovecot
+  notify: restart dovecot
   tags: fm-rcconf-dovecot
 
 - name: "rcconf: Configure DKIM"
@@ -118,8 +130,41 @@
     backup: "{{ fm_backup_conf }}"
   loop: "{{ fm_dkim_rcconf }}"
   when: fm_dkim_enable|bool
-  notify: reload dkim
+  notify: restart dkim
   tags: fm-rcconf-dkim
+
+- name: "rcconf: Configure SpamAssassin"
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: '{{ item.regexp }}="{{ item.value }}"'
+    backup: "{{ fm_backup_conf }}"
+  loop: "{{ fm_sa_rcconf }}"
+  when: fm_sa_enable|bool
+  notify: restart SpamAssassin
+  tags: fm-rcconf-sa
+
+- name: "rcconf: Configure sa-milter"
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: '{{ item.regexp }}="{{ item.value }}"'
+    backup: "{{ fm_backup_conf }}"
+  loop: "{{ fm_sa_milter_rcconf }}"
+  when: fm_sa_milter_enable|bool
+  notify: restart sa-milter
+  tags: fm-rcconf-sa-milter
+
+- name: "rcconf: Configure milter-regex"
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: '{{ item.regexp }}="{{ item.value }}"'
+    backup: "{{ fm_backup_conf }}"
+  loop: "{{ fm_milter_regex_rcconf }}"
+  when: fm_sa_milter_enable|bool
+  notify: restart milter-regex
+  tags: fm-rcconf-milter-regex
 
 # EOF
 ...

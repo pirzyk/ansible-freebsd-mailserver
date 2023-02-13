@@ -90,5 +90,20 @@
   when: fm_dovecot_enable|bool
   tags: fm-dovecot
 
+- name: Import sa.yml
+  ansible.builtin.import_tasks: sa.yml
+  when: fm_sa_enable|bool
+  tags: fm-sa
+
+- name: Import sa-milter.yml
+  ansible.builtin.import_tasks: sa-milter.yml
+  when: fm_sa_milter_enable|bool
+  tags: fm-sa-milter
+
+- name: Import milter-regex.yml
+  ansible.builtin.import_tasks: milter-regex.yml
+  when: fm_milter_regex_enable|bool
+  tags: fm-milter-regex
+
 # EOF
 ...

@@ -1,0 +1,17 @@
+---
+
+- name: "spamassassin: Create {{ fm_sa_local_cf_file }}"
+  ansible.builtin.template:
+    dest: "{{ fm_sa_local_cf_file }}"
+    src: sa-local.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sa_local_cf|default([])|length > 0
+  notify: restart SpamAssassin
+
+# Need to create the /usr/libexec/sm.bin/sa-learn sym link to /usr/local/bin/sa-learn for the aliases to work
+# This can be done as a config option using the fp_links hash in ansible-role-freebsd-postinstall
+
+# EOF
+...
