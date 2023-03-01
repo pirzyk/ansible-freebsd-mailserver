@@ -1,15 +1,5 @@
 ---
 
-- name: "sendmail: create {{ fm_sendmail_mc_file }}"
-  ansible.builtin.file:
-    state: touch
-    access_time: preserve
-    modification_time: preserve
-    path: "{{ fm_sendmail_mc_file }}"
-    owner: root
-    group: wheel
-    mode: '0644'
-
 - name: "sendmail: Configure {{ sendmail_access_file }}"
   ansible.builtin.template:
     dest: "{{ sendmail_access_file }}"
@@ -80,11 +70,19 @@
   notify: Update virtusertable
 
 - name: "sendmail: Configure {{ fm_sendmail_mc_file }}"
-  ansible.builtin.lineinfile:
-    dest: "{{ fm_sendmail_mc_file }}"
-    regexp: '^{{ item.regexp }}'
-    line: "{{ item.line }}"
+  ansible.builtin.blockinfile:
+    marker: "dnl {mark} {{ item.name }} ANSIBLE MANAGED BLOCK"
+    path: "{{ fm_sendmail_mc_file }}"
+    block: "{{ item.block | join(\"\n\") }}"
+    insertafter: "{{ item.after | default(omit) }}"
+    insertbefore: "{{ item.before | default(omit) }}"
+    create: yes
+    owner: root
+    group: wheel
+    mode: '0644'
   loop: "{{ sendmail_mc_conf }}"
+  loop_control:
+    label: "{{ fm_sendmail_mc_file }} block {{ item.name }}"
   when: fm_sendmail_enable|bool
   notify: Update sendmail.cf
 
