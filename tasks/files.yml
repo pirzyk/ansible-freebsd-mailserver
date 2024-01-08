@@ -1,0 +1,13 @@
+---
+
+- name: "files: Create file {{ postfix_virtual }}"
+  ansible.builtin.shell:
+    cmd: >
+      /usr/bin/touch {{ postfix_virtual }} &&
+      /usr/sbin/chown root:wheel {{ postfix_virtual }} &&
+      chmod 0644 {{ postfix_virtual }}
+    creates: "{{ postfix_virtual }}"
+  tags: postfix_virtual_aliases_file
+
+# EOF
+...

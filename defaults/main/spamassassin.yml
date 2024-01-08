@@ -1,0 +1,24 @@
+---
+# Spam Assassin (4.0 syntax)
+fm_sa_user: spamd
+fm_sa_base_dir: "/usr/local/etc/mail/spamassassin"
+fm_sa_spool_dir: "/var/spool/{{ fm_sa_user }}"
+fm_sa_local_cf_file: "{{ fm_sa_base_dir }}/local.cf"
+fm_sa_local_cf:
+  loadplugin:
+    - 'Mail::SpamAssassin::Plugin::Shortcircuit'
+  options:
+    - { key: report_hostname, value: "{{ ansible_fqdn }}" }
+  welcomelist:
+    - { subkey: from, value: joe@example.com }
+  add_header:
+    - { type: 'all', string: 'Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_' }
+fm_sa_bayes_files:
+  - "{{ fm_sa_spool_dir }}/.spamassassin/bayes_journal"
+  - "{{ fm_sa_spool_dir }}/.spamassassin/bayes_seen"
+  - "{{ fm_sa_spool_dir }}/.spamassassin/bayes_toks"
+fm_sa_bays_mode: '0660'
+fm_sa_users_pref_mode: '0640'
+
+# EOF
+...
