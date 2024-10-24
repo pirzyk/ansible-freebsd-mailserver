@@ -93,4 +93,9 @@
   when: fm_sendmail_enable|bool
   tags: fm-sendmail
 
+- name: Import milter-regex.yml
+  ansible.builtin.import_tasks: milter-regex.yml
+  when: fm_milter_regex_enable|bool
+  tags: fm-milter-regex
+
 # EOF

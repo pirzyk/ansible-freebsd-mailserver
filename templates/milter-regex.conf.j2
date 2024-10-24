@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+#
+# Some examples taken from
+#    http://www.impsec.org/~jhardin/antispam/milter-regex.conf
+{% for item in fm_milter_regex_cf %}
+
+{{ item.verb }}
+{%  for line in item.conf %}
+    {{ line }}
+{%  endfor %}
+{% endfor %}

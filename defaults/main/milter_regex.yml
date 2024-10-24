@@ -1,0 +1,20 @@
+---
+# Milter-regex
+fm_milter_regex_bin: '/usr/local/libexec/milter-regex'
+fm_milter_regex_cf_file: '/usr/local/etc/milter-regex.conf'
+fm_milter_regex_user: 'mailnull'
+fm_milter_regex_rcconf:
+  - {regexp: milterregex_flags, value: "-u {{ fm_milter_regex_user }} -c {{ fm_milter_regex_cf_file }}" }
+fm_milter_regex_cf:
+  - verb: accept
+    conf:
+      - 'connect // /127.0.0.1/'
+  # Block helo messages from the RFC 1918 private IP space
+#  - verb: 'reject "Please use your real hostname in your HELO - private networks not valid"'
+#    conf:
+#      - 'helo /^\[?10\./e and body /./'
+#      - 'helo /^\[?192\.168\./e and body /./'
+#      - 'helo /^\[?172\.(1[6-9]|2[0-9]|3[0-2])\./e and body /./'
+
+# EOF
+...
