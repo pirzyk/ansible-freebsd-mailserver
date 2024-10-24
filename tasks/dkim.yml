@@ -44,6 +44,7 @@
 - name: "Dkim: Create {{ fm_dkim_dir ~ '/TrustedHosts' }}"
   when: fm_dkim_create_trusted_hosts | bool
   tags: fm-dkim-create-TrustedHosts
+  notify: reload dkim
   ansible.builtin.template:
     src: TrustedHosts.j2
     dest: "{{ fm_dkim_dir }}/TrustedHosts"
@@ -52,6 +53,7 @@
 - name: "Dkim: Create {{ fm_dkim_dir ~ '/SigningTable' }}"
   when: fm_dkim_create_signingtable | bool
   tags: fm-dkim-create-SigningTable
+  notify: reload dkim
   ansible.builtin.template:
     src: SigningTable.j2
     dest: "{{ fm_dkim_dir }}/SigningTable"
@@ -60,6 +62,7 @@
 - name: "Dkim: Create {{ fm_dkim_dir ~ '/KeyTable' }}"
   when: fm_dkim_create_keytable | bool
   tags: fm-dkim-create-KeyTable
+  notify: reload dkim
   ansible.builtin.template:
     src: KeyTable.j2
     dest: "{{ fm_dkim_dir }}/KeyTable"

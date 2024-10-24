@@ -1,5 +1,6 @@
 ---
 - name: "Dirs: Create DKIM dirs"
+  when: fm_dkim_enable|bool
   tags: fm-dirs-dkim
   ansible.builtin.file:
     state: directory
@@ -12,6 +13,7 @@
     - "{{ fm_dkim_dir_keys }}"
 
 - name: "Dirs: Create DKIM domain key dirs"
+  when: fm_dkim_enable|bool
   tags: fm-dirs-dkim-domains
   ansible.builtin.file:
     state: directory
