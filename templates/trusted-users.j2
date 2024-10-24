@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+{% for user in fm_sendmail_trusted_users %}
+{{ user }}
+{% endfor %}

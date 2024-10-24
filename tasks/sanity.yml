@@ -27,4 +27,9 @@
     tasks_from: al_sanity_ansible_version
   when: fm_sanity_ansible_version|bool
 
+- name: "sanity: Invalid _enable variable values"
+  ansible.builtin.fail:
+    msg: "[ERROR] Cannot enable both postfix and sendmail"
+  when: (fm_sendmail_enable|bool) and (fm_postfix_enable|bool)
+
 # EOF

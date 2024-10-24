@@ -83,4 +83,9 @@
   ansible.builtin.import_tasks: dovecot.yml
   tags: fm-dovecot
 
+- name: Import sendmail.yml
+  ansible.builtin.import_tasks: sendmail.yml
+  when: fm_sendmail_enable|bool
+  tags: fm-sendmail
+
 # EOF
