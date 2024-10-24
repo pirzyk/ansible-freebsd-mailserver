@@ -47,6 +47,7 @@
     dest: "{{ fm_dkim_dir }}/TrustedHosts"
     mode: "0644"
   when: fm_dkim_create_trusted_hosts | bool
+  notify: reload dkim
   tags: fm-dkim-create-TrustedHosts
 
 - name: "Dkim: Create {{ fm_dkim_dir ~ '/SigningTable' }}"
@@ -55,6 +56,7 @@
     dest: "{{ fm_dkim_dir }}/SigningTable"
     mode: "0644"
   when: fm_dkim_create_signingtable | bool
+  notify: reload dkim
   tags: fm-dkim-create-SigningTable
 
 - name: "Dkim: Create {{ fm_dkim_dir ~ '/KeyTable' }}"
@@ -63,6 +65,7 @@
     dest: "{{ fm_dkim_dir }}/KeyTable"
     mode: "0644"
   when: fm_dkim_create_keytable | bool
+  notify: reload dkim
   tags: fm-dkim-create-KeyTable
 
 - name: "Dkim: Set ownership and permissions of DKIM run dir"

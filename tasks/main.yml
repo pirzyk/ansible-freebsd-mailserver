@@ -67,6 +67,7 @@
 
 - name: Import dkim.yml
   ansible.builtin.import_tasks: dkim.yml
+  when: fm_dkim_enable|bool
   tags: fm-dkim
 
 - name: Import virtual_aliases.yml

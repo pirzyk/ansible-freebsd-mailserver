@@ -9,6 +9,7 @@
   loop:
     - "{{ fm_dkim_dir }}"
     - "{{ fm_dkim_dir_keys }}"
+  when: fm_dkim_enable|bool
   tags: fm-dirs-dkim
 
 - name: "Dirs: Create DKIM domain key dirs"
