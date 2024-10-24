@@ -88,11 +88,52 @@
 
 # Sendmail
 
+- name: restart sendmail
+  ansible.builtin.service:
+    name: sendmail
+    state: restarted
+  when: fm_sendmail_enable|bool
+
+- name: start sendmail
+  ansible.builtin.service:
+    name: sendmail
+    state: started
+
 - name: Stop sendmail
   listen: stop sendmail
   ansible.builtin.service:
     name: sendmail
     state: stopped
+
+- name: Update access
+  ansible.builtin.shell:
+  args:
+    cmd: "/usr/sbin/makemap hash {{ sendmail_access_file }} < {{ sendmail_access_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+
+- name: Update genericstable
+  ansible.builtin.shell:
+  args:
+    cmd: "/usr/sbin/makemap hash {{ sendmail_genericstable_file }} < {{ sendmail_genericstable_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+
+- name: Update mailertable
+  ansible.builtin.shell:
+  args:
+    cmd: "/usr/sbin/makemap hash {{ sendmail_mailertable_file }} < {{ sendmail_mailertable_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+
+- name: Update virtusertable
+  ansible.builtin.shell:
+  args:
+    cmd: "/usr/sbin/makemap hash {{ sendmail_virtusertable_file }} < {{ sendmail_virtusertable_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+
+- name: Update sendmail.cf
+  ansible.builtin.command:
+    cmd: "/usr/bin/make {{ fm_sendmail_cf_file }}"
+    chdir: "{{ fm_sendmail_dir }}"
+  notify: restart sendmail
 
 # DKIM
 

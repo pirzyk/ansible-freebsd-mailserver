@@ -131,4 +131,16 @@
       loop:
         - { regexp: milteropendkim_enable, value: "NO" }
 
+- name: "rcconf: Enable sendmail in /etc/rc.conf"
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: '{{ item.regexp }}="{{ item.value }}"'
+    backup: "{{ fm_backup_conf }}"
+  loop:
+    - {regexp: sendmail_enable, value: "YES"}
+  when: fm_sendmail_enable|bool
+  notify: start sendmail
+  tags: fm-rcconf-sendmail
+
 # EOF

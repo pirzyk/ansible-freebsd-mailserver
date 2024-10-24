@@ -1,0 +1,51 @@
+---
+# Sendmail configs
+fm_sendmail_dir: /etc/mail
+fm_sendmail_logfile: /var/log/maillog
+fm_sendmail_statfile: /var/log/sendmail.st
+fm_sendmail_logfile_owner: root
+fm_sendmail_logfile_group: mail
+fm_sendmail_logfile_mode: '0640'
+fm_sendmail_logfile_count: 10
+fm_sendmail_mc_file: "{{ fm_sendmail_dir }}/sendmail.mc"
+sendmail_mc_conf: []
+#  - name: 'conf'
+#    before: 'DAEMON_OPTIONS'
+#    block:
+#      - "define(`confLOG_LEVEL', 10)dnl"
+#  - name: 'daemon'
+#    after: 'confLOG_LEVEL'
+#    block:
+#      - "DAEMON_OPTIONS(`Name=MTA-v4, Family=inet')"
+#      - "DAEMON_OPTIONS(`Name=MTA-v6, Family=inet6')"
+#  - name: 'mailer'
+#    before: 'LOCAL_RULESETS'
+#    block:
+#      - "MAILER(smtp)dnl"
+#  - name: 'local rulesets'
+#    after: EOF
+#    block:
+#      - 'LOCAL_RULESETS'
+#      - 'SLocal_trust_auth'
+#      - 'R$*	$: $&{auth_authen}'
+#      - 'Rsmmsp	$# OK'
+fm_sendmail_cf_file: "{{ fm_sendmail_dir }}/sendmail.cf"
+sendmail_access_file: "{{ fm_sendmail_dir }}/access"
+sendmail_genericstable_file: "{{ fm_sendmail_dir }}/genericstable"
+sendmail_local_hosts_file: "{{ fm_sendmail_dir }}/local-host-names"
+sendmail_mailertable_file: "{{ fm_sendmail_dir }}/mailertable"
+fm_sendmail_relay_domains: []
+sendmail_relay_domains_file: "{{ fm_sendmail_dir }}/relay-domains"
+sendmail_trusted_users_file: "{{ fm_sendmail_dir }}/trusted-users"
+fm_sendmail_trusted_users: [ root ]
+sendmail_virtusertable_file: "{{ fm_sendmail_dir }}/virtusertable"
+
+# /etc/periodic.conf.local
+fm_periodic_conf:
+  - {regexp: daily_clean_hoststat_enable, value: 'NO'}
+  - {regexp: daily_status_mail_rejects_enable, value: 'NO'}
+  - {regexp: daily_status_include_submit_mailq, value: 'NO'}
+  - {regexp: daily_submit_queuerun, value: 'NO'}
+
+# EOF
+...
