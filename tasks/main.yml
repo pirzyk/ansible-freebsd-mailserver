@@ -13,6 +13,7 @@
 
 - name: Import files.yml
   ansible.builtin.import_tasks: files.yml
+  when: fm_postfix_enable|bool
   tags: fm-files
 
 - name: Import dirs.yml
@@ -46,18 +47,22 @@
 
 - name: Import postfix.yml
   ansible.builtin.import_tasks: postfix.yml
+  when: fm_postfix_enable|bool
   tags: fm-postfix
 
 - name: Import postfix_sasl.yml
   ansible.builtin.import_tasks: postfix_sasl.yml
+  when: fm_postfix_enable|bool
   tags: fm-postfix_sasl
 
 - name: Import postifix_master.yml
   ansible.builtin.import_tasks: postfix_master.yml
+  when: fm_postfix_enable|bool
   tags: fm-postfix_master
 
 - name: Import spf.yml
   ansible.builtin.import_tasks: spf.yml
+  when: fm_postfix_enable|bool
   tags: fm-spf
 
 - name: Import dkim.yml
@@ -66,10 +71,12 @@
 
 - name: Import virtual_aliases.yml
   ansible.builtin.import_tasks: virtual_aliases.yml
+  when: fm_postfix_enable|bool
   tags: fm-virtual_aliases
 
 - name: Import aliases.yml
   ansible.builtin.import_tasks: aliases.yml
+  when: fm_postfix_enable|bool
   tags: fm-aliases
 
 - name: Import dovecot.yml

@@ -11,8 +11,9 @@
     - { regexp: hostname, value: "{{ rc_conf_hostname }}" }
 
 - name: "Rcconf: Disable sendmail in /etc/rc.conf"
-  tags: fm-rcconf-sendmail
+  when: fm_postfix_enable|bool
   notify: stop sendmail
+  tags: fm-rcconf-sendmail
   ansible.builtin.lineinfile:
     dest: /etc/rc.conf
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
@@ -52,7 +53,6 @@
 
     - name: "Rcconf: Disable and Stop Postfix"
       when: not fm_postfix_enable | bool
-      notify: disable and stop postfix
       ansible.builtin.lineinfile:
         dest: /etc/rc.conf
         regexp: ^\s*{{ item.regexp }}\s*=(.*)$
