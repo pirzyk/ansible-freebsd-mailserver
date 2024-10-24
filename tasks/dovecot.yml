@@ -56,6 +56,7 @@
       group = postfix
       }
   notify: reload dovecot
+  when: fm_postfix_enable|bool
   tags: dovecot_master_conf
 
 - name: Create dh.pem

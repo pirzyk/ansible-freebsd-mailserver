@@ -21,8 +21,9 @@
     - { regexp: sendmail_submit_enable, value: "NO" }
     - { regexp: sendmail_outbound_enable, value: "NO" }
     - { regexp: sendmail_msp_queue_enable, value: "NO" }
+  when: fm_postfix_enable|bool
   notify: stop sendmail
-  tags: fm-rcconf-sendmail
+  tags: fm-rcconf-postfix
 
 - name: "Rcconf: Enable and Start Postfix"
   ansible.builtin.lineinfile:
@@ -61,18 +62,6 @@
   when: fm_dkim_enable|bool
   notify: enable and start dkim
   tags: fm-rcconf-dkim
-
-- name: "Rcconf: Disable and Stop Postfix"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop:
-    - { regexp: postfix_enable, value: "NO" }
-  when: not fm_postfix_enable|bool
-  notify: disable and stop postfix
-  tags: fm-rcconf-postfix
 
 - name: "Rcconf: Disable and Stop Dovecot"
   ansible.builtin.lineinfile:
