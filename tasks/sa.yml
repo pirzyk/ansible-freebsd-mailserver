@@ -1,0 +1,39 @@
+---
+
+- name: "spamassassin: Create {{ fm_sa_local_cf_file }}"
+  ansible.builtin.template:
+    dest: "{{ fm_sa_local_cf_file }}"
+    src: sa-local.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_sa_local_cf|default([])|length > 0
+  notify: restart SpamAssassin
+
+- name: 'spamassassin: Set ownership and permissions of bayes_* files'
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ fm_sa_user }}"
+    group: "{{ fm_sendmail_logfile_group }}"
+    mode: "{{ fm_sa_bays_mode }}"
+  loop: "{{ fm_sa_bayes_files }}"
+  loop_control:
+    label: "{{ item }}"
+  notify: restart SpamAssassin
+
+# This may not exist in SA 4.x
+#- name: 'spamassassin: Set ownership and permissions of user_prefs file'
+#  ansible.builtin.file:
+#    path: "{{ fm_sa_spool_dir }}/.spamassassin/user_prefs"
+#    owner: "{{ fm_sa_user }}"
+#    group: "{{ fm_sendmail_logfile_group }}"
+#    mode: "{{ fm_sa_users_pref_mode }}"
+
+# Need to create the /usr/libexec/sm.bin/sa-learn sym link to /usr/local/bin/sa-learn for the aliases to work
+# This can be done as a config option using the fp_links hash in ansible-role-freebsd-postinstall
+#
+# Need to also create the sa-update crontab entry
+# This can be done via the fp_cron_tab in ansible-role-freebsd-postinstall
+
+# EOF
+...

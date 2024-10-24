@@ -129,4 +129,15 @@
   notify: start sendmail
   tags: fm-rcconf-sendmail
 
+- name: "rcconf: Configure SpamAssassin"
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: '{{ item.regexp }}="{{ item.value }}"'
+    backup: "{{ fm_backup_conf }}"
+  loop: "{{ fm_sa_rcconf }}"
+  when: fm_sa_enable|bool
+  notify: restart SpamAssassin
+  tags: fm-rcconf-sa
+
 # EOF
