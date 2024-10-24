@@ -1,5 +1,6 @@
 ---
 - name: Copy example-conf files to /usr/local/etc/dovecot/
+  when: dovecot_example_copy | bool
   tags: dovecot_conf_example
   block:
 
@@ -82,6 +83,7 @@
         src: "{{ dovecot_ssl_dh_custom_path }}"
         dest: "{{ dovecot_ssl_dh }}"
         backup: "{{ fm_backup_conf }}"
+        remote_src: "{{ dovecot_ssl_dh_custom_path_remote | default('no') }}"
         owner: root
         group: wheel
         mode: "0644"
