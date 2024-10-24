@@ -12,6 +12,7 @@
     - dovecot-ldap.conf.ext
     - dovecot-sql.conf.ext
     - dovecot.conf
+  when: dovecot_example_copy | bool
   tags: dovecot_example_conf
 
   # dovecot.conf
@@ -67,6 +68,7 @@
       ansible.builtin.copy:
         src: "{{ dovecot_ssl_dh_custom_path }}"
         dest: "{{ dovecot_ssl_dh }}"
+        remote_src: "{{ dovecot_ssl_dh_custom_path_remote | default('no') }}"
         owner: root
         group: wheel
         mode: "0644"
