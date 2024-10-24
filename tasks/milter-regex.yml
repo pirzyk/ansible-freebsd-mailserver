@@ -1,0 +1,14 @@
+---
+
+- name: "milter-regex: Create {{ fm_milter_regex_cf_file }}"
+  ansible.builtin.template:
+    dest: "{{ fm_milter_regex_cf_file }}"
+    src: milter-regex.conf.j2
+    owner: root
+    group: wheel
+    mode: '0644'
+  when: fm_milter_regex_cf|default([])|length > 0
+  notify: verify milter-regex
+
+# EOF
+...

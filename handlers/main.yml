@@ -165,4 +165,32 @@
     state: restarted
   when: fm_dkim_enable | bool
 
+# Milter regex
+
+- name: enable and start milter-regex
+  ansible.builtin.service:
+    name: milterregex
+    state: started
+    enabled: true
+  when: fm_milter_regex_enable|bool
+   
+- name: disable and stop milter-regex
+  ansible.builtin.service:
+    name: milterregex
+    state: stopped
+    enabled: false
+  when: fm_milter_regex_enable|bool
+   
+- name: restart milter-regex
+  ansible.builtin.service:
+    name: milterregex
+    state: restarted
+  when: fm_milter_regex_enable|bool
+   
+- name: verify milter-regex
+  ansible.builtin.command:
+    cmd: "{{ fm_milter_regex_bin }} -t -c {{ fm_milter_regex_cf_file }}"
+  when: fm_milter_regex_enable|bool
+  notify: restart milter-regex
+
 # EOF
