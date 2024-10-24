@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+{% for plugin in fm_sa_local_cf.loadplugin | default([]) %}
+loadplugin {{ plugin }}
+{% endfor %}
+
+{% for item in fm_sa_local_cf.options | default([]) %}
+{{ item.key }} {{ item.value }}
+{% endfor %}
+
+{% for item in fm_sa_local_cf.add_header | default([]) %}
+add_header {{ item.type }} {{ item.string }}
+{% endfor %}
+
+{% for item in fm_sa_local_cf.welcomelist | default([]) %}
+welcomelist_{{ item.subkey }} {{ item.value }}
+{% endfor %}
+
+{% for item in fm_sa_local_cf.score | default([]) %}
+score {{ item.key }} {{ item.value }}
+{% endfor %}

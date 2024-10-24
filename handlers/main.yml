@@ -193,4 +193,32 @@
   when: fm_milter_regex_enable|bool
   notify: restart milter-regex
 
+# Spam milter
+
+- name: enable and start SpamAssassin
+  ansible.builtin.service:
+    name: sa-spamd
+    state: started
+    enabled: true
+  when: fm_sa_enable|bool
+
+- name: disable and stop SpamAssassin
+  ansible.builtin.service:
+    name: sa-spamd
+    state: stopped
+    enabled: false
+  when: fm_sa_enable|bool
+
+- name: reload SpamAssassin
+  ansible.builtin.service:
+    name: sa-spamd
+    state: reloaded
+  when: fm_sa_enable|bool
+
+- name: restart SpamAssassin
+  ansible.builtin.service:
+    name: sa-spamd
+    state: restarted
+  when: fm_sa_enable|bool
+
 # EOF

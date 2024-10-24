@@ -98,4 +98,9 @@
   when: fm_milter_regex_enable|bool
   tags: fm-milter-regex
 
+- name: Import sa.yml
+  ansible.builtin.import_tasks: sa.yml
+  when: fm_sa_enable|bool
+  tags: fm-sa
+
 # EOF
